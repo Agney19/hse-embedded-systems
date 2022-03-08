@@ -8,6 +8,10 @@ p1_2_2 - practice2, 2 (ii)
 
 p1_2_3 - practice2, 2 (iii)
 
+p1_3_1 - practice2, 3 (Coremark)
+
+p1_3_2 - practice2, 3 (Dhrystone)
+
 p1_4 - practice2, 4 (цифровой замок)
 
 p1_5 - practice2, 5 (светофор)
