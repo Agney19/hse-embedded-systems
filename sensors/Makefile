@@ -1,5 +1,5 @@
 # name of your application
-APPLICATION = p1_2_2
+APPLICATION = sensors
 
 # If no BOARD is found in the environment, use this default:
 BOARD ?= unwd-range-l1-r3
@@ -7,8 +7,9 @@ BOARD ?= unwd-range-l1-r3
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../..
 
-USEMODULE += periph_gpio_irq
-USEMODULE += xtimer
+USEMODULE += bme280
+USEMODULE += opt3001
+USEMODULE += lptimer
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the

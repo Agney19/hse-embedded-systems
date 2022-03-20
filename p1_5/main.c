@@ -1,17 +1,12 @@
 #include <board.h>
 #include <periph/gpio.h>
 #include "periph_conf.h"
+#include "thread.h"
 #include "xtimer.h"
 
 #define UNUSED(x) (void)(x)
 
-void delay_ms(const uint16_t ms) {
-    uint32_t i = ms * 4000; /* approx. value */
-    while (i-- > 0) {
-      __asm("nop");
-    }
-}
-
+xtimer_t t1;
 const uint32_t threshold = 2000000;
 const int red_light_pin = UNWD_GPIO_28;
 const int yellow_light_pin = UNWD_GPIO_27;
@@ -23,6 +18,11 @@ int light_number = sizeof(lights)/sizeof(lights[0]);
 int active_light_idx = 0;
 bool is_hastened = false;
 uint32_t toggle_time;
+
+void callback(void *arg) {
+    (void) arg;
+    gpio_irq_enable(UNWD_GPIO_1);
+}
 
 void btn_handler(void *arg) {
 	UNUSED(arg);
@@ -43,12 +43,13 @@ void btn_handler(void *arg) {
 	toggle_time = cur_time + threshold;
 	is_hastened = true;
 	printf("Successfully hastened. Next toggle will occur in %ld\n\r", toggle_time);
+        t1.callback = callback;
+	xtimer_set(&t1, 1000);
 	gpio_irq_disable(UNWD_GPIO_1);
-	delay_ms(200);
-	gpio_irq_enable(UNWD_GPIO_1);
 }
 
 int main(void) {
+    t1.callback = callback;
     gpio_init(red_light_pin, GPIO_OUT);
     gpio_init(yellow_light_pin, GPIO_OUT);
     gpio_init(green_light_pin, GPIO_OUT);
